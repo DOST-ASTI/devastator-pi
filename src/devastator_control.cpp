@@ -25,15 +25,6 @@ public:
   //Create a public class member to publish flags used for robot movement.
   void FlagPublisher(int x);
 
-  //Set Get sensor data variables.
-  float sonic_FF_data();
-  float sonic_FD_data();
-  float aIR_FR_data();
-  float aIR_FL_data();
-  float dIR_F_data();
-  float dIR_BR_data();
-  float dIR_BL_data();
-
   //Override and geometry variables.
   bool override_flag();
   bool override_;
@@ -45,38 +36,14 @@ private:
   void VelCallback(const geometry_msgs::Twist::ConstPtr& twist);
   void OverrideCallback(const std_msgs::Bool::ConstPtr& override_msg);
 
-  //Sensor data subscribers
-  void sonic_FF_Callback(const sensor_msgs::Range::ConstPtr& sonic_FF_msg);
-  void sonic_FD_Callback(const sensor_msgs::Range::ConstPtr& sonic_FD_msg);
-  void aIR_FR_Callback(const sensor_msgs::Range::ConstPtr& aIR_FR_msg);
-  void aIR_FL_Callback(const sensor_msgs::Range::ConstPtr& aIR_FL_msg);
-  void dIR_F_Callback(const sensor_msgs::Range::ConstPtr& dIR_F_msg);
-  void dIR_BR_Callback(const sensor_msgs::Range::ConstPtr& dIR_BR_msg);
-  void dIR_BL_Callback(const sensor_msgs::Range::ConstPtr& dIR_BL_msg);
-
   //ROS variables
   ros::NodeHandle nh_;
   ros::Publisher nav_flag_pub;
   ros::Publisher buzz_pub;
   ros::Subscriber vel_sub;
   ros::Subscriber override_sub;
-  ros::Subscriber sonic_FF_sub;
-  ros::Subscriber sonic_FD_sub;
-  ros::Subscriber aIR_FR_sub;
-  ros::Subscriber aIR_FL_sub;
-  ros::Subscriber dIR_F_sub;
-  ros::Subscriber dIR_BR_sub;
-  ros::Subscriber dIR_BL_sub;
-  ros::Subscriber detect_sub;
 
   //Set variables for sensor data
-  float sonic_FD_range;
-  float sonic_FF_range;
-  float aIR_FR_range;
-  float aIR_FL_range;
-  float dIR_F_range;
-  float dIR_BR_range;
-  float dIR_BL_range;
   float linear_,angular_;
 };
 
@@ -136,26 +103,20 @@ int main(int argc, char** argv)
     ros::spinOnce();
 
     //If no override is detected. Navigate autonomously.
-    if (devastator.override_flag())
-    {
-      float* vel = devastator.vel_data();
+    float* vel = devastator.vel_data();
 
-      if (vel[0] < 0.0) {
-        devastator.FlagPublisher(5);
-      }else if (vel[0] > 0.0) {
-        devastator.FlagPublisher(1);
-      }else if (vel[1] < 0.0) {
-        devastator.FlagPublisher(2);
-      }else if (vel[1] > 0.0) {
-        devastator.FlagPublisher(3);
-      }else
-        devastator.FlagPublisher(6);
-    }
-    else
-    {
-      devastator.FlagPublisher(0); //Do nothing
-    }
-    
+    if (vel[0] < 0.0) {
+      devastator.FlagPublisher(5);
+    }else if (vel[0] > 0.0) {
+      devastator.FlagPublisher(1);
+    }else if (vel[1] < 0.0) {
+      devastator.FlagPublisher(2);
+    }else if (vel[1] > 0.0) {
+      devastator.FlagPublisher(3);
+    }else if (vel[0] == 0.0 && vel[1] == 0.0){
+      devastator.FlagPublisher(6);
+    }else
+      devastator.FlagPublisher(6);
     r.sleep();
   }
   return 0;
