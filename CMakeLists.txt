@@ -10,6 +10,7 @@ project(devastator)
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   roscpp
+  rospy
   sensor_msgs
   std_msgs
 )
