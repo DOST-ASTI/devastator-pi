@@ -5,6 +5,7 @@ This contains the arduino source code used in running the devastator bot.
 ## Minimum System Requirements
 * CPU: Intel Skylake i5/Ryzen 5 or higher 
 * CPU SPEED: 2.5 Ghz
+* OS: Ubuntu 16.04/ Ubuntu 16.04 WSL (Windows 10)
 * RAM: 6 GB
 
 ## Installation
