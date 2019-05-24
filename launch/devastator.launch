@@ -1,8 +1,8 @@
 <launch>
   <!-- Launch Nodes -->
-  <node name="override_node" respawn="true" pkg="devastator" type="override"  output="screen"/>
-  <node name="control_node" respawn="true" pkg="devastator" type="control"  output="screen" />
-  <node name="key_teleop_node" respawn="true" pkg="devastator" type="devastator_key_teleop.py"  output="screen" />
+  <node name="override_node" respawn="true" pkg="devastator-pi" type="override"  output="screen"/>
+  <node name="control_node" respawn="true" pkg="devastator-pi" type="control"  output="screen" />
+  <node name="key_teleop_node" respawn="true" pkg="devastator-pi" type="devastator_key_teleop.py"  output="screen" />
   
   <!-- Uncomment to run Joystick teleoperation -->
   <!-- joystick node -->
