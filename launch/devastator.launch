@@ -2,18 +2,20 @@
   <!-- Launch Nodes -->
   <node name="override_node" respawn="true" pkg="devastator" type="override"  output="screen"/>
   <node name="control_node" respawn="true" pkg="devastator" type="control"  output="screen" />
-
+  <node name="key_teleop_node" respawn="true" pkg="devastator" type="devastator_key_teleop.py"  output="screen" />
+  
+  <!-- Uncomment to run Joystick teleoperation -->
   <!-- joystick node -->
-  <node name="joy_master_node" respawn="true" pkg="joy" type="joy_node" >
+  <!-- <node name="joy_master_node" respawn="true" pkg="joy" type="joy_node" >
     <param name="dev" type="string" value="/dev/input/js0" />
     <param name="deadzone" value="0.12" />
-  </node>
+  </node-->
 
   <!-- Axes -->
-  <param name="axis_linear" value="1" type="int"/>
+  <!--param name="axis_linear" value="1" type="int"/>
   <param name="axis_angular" value="0" type="int"/>
   <param name="scale_linear" value="2" type="double"/>
   <param name="scale_angular" value="2" type="double"/>
-  <node name="robot_joy_node" pkg="devastator" type="devastator_joy" />
+  <node name="robot_joy_node" pkg="devastator" type="devastator_joy" /> -->
 
 </launch>
