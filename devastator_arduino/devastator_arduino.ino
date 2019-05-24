@@ -290,7 +290,7 @@ void setup()
 void loop()
 {
   // Motor Speed Assignments 
-  int motor_speed = 128;
+  int motor_speed = 120;
   int slow_motor_speed = 80;
 
   // Get Sensor Data
@@ -303,10 +303,10 @@ void loop()
   float sonic_D_range;
 
   // Range limits
-  float sonic_FF_zone = 0.15;
-  float sonic_FD_zone = 0.15;
-  float aIR_FR_zone = 0.18;
-  float aIR_FL_zone = 0.18;
+  float sonic_FF_zone = 0.20;
+  float sonic_FD_zone = 0.20;
+  float aIR_FR_zone = 0.25;
+  float aIR_FL_zone = 0.25;
   
   // Get initial sensor values
   assess_all(aIR_FR_range, aIR_FL_range, dIR_BR_range, dIR_BL_range,sonic_D_range, sonic_F_range, dIR_F_range);
@@ -325,7 +325,7 @@ void loop()
         if (dIR_BR_range && dIR_BL_range)
         {
           back_off(motor_speed, motor_speed);
-          delay(400);
+          delay(600);
           assess_LR(aIR_FR_range, aIR_FL_range);
           if (aIR_FR_range > aIR_FL_range){
             turn_R(slow_motor_speed, slow_motor_speed);
@@ -366,7 +366,7 @@ void loop()
       if (dIR_BR_range && dIR_BL_range)
         {
           back_off(motor_speed, motor_speed);
-          delay(400);
+          delay(600);
           assess_LR(aIR_FR_range, aIR_FL_range);
           if (aIR_FR_range > aIR_FL_range){
             turn_R(slow_motor_speed,slow_motor_speed);
