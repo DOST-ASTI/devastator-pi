@@ -302,9 +302,6 @@ void loop()
   float sonic_F_range;
   float sonic_D_range;
 
-  string currentMove;
-  string previousMove;
-
   // Range limits
   float sonic_FF_zone = 0.20;
   float sonic_FD_zone = 0.20;
@@ -320,9 +317,7 @@ void loop()
     if (aIR_FR_range > aIR_FR_zone && aIR_FL_range > aIR_FL_zone){
       assess_front(sonic_F_range, sonic_D_range, dIR_F_range);
       while (sonic_F_range > sonic_FF_zone && (sonic_D_range > sonic_FD_zone)){
-        currentMove = 'forward';
         advance(motor_speed,motor_speed);
-      
       }
       assess_back(dIR_BR_range, dIR_BL_range);
       if (dIR_BR_range && dIR_BL_range)
