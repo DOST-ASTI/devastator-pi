@@ -201,7 +201,7 @@ float Sonic_F_Range()
 
   duration = pulseIn(echoPin_F, HIGH);
 
-  distance = (duration / 2) * 0.00034;
+  distance = (duration / 2) * 0.00034; // Distance in meters
   return distance;
   
 }
@@ -218,7 +218,7 @@ float Sonic_D_Range()
 
   duration = pulseIn(echoPin_D, HIGH);
 
-  distance = (duration / 2) * 0.00034;
+  distance = (duration / 2) * 0.00034; // Distance in meters
   return distance;
 }
 
@@ -316,41 +316,39 @@ void loop()
     assess_LR(aIR_FR_range, aIR_FL_range);
     if (aIR_FR_range > aIR_FR_zone && aIR_FL_range > aIR_FL_zone){
       assess_front(sonic_F_range, sonic_D_range, dIR_F_range);
-      if ( sonic_F_range > sonic_FF_zone && (sonic_D_range > sonic_FD_zone)){
+      while (sonic_F_range > sonic_FF_zone && (sonic_D_range > sonic_FD_zone)){
         advance(motor_speed,motor_speed);
+      }
+      assess_back(dIR_BR_range, dIR_BL_range);
+      if (dIR_BR_range && dIR_BL_range)
+      {
+        back_off(motor_speed, motor_speed);
+        delay(600);
+        assess_LR(aIR_FR_range, aIR_FL_range);
+        if (aIR_FR_range > aIR_FL_range){
+          turn_R(slow_motor_speed, slow_motor_speed);
+          delay(400);
+        }
+        else if (aIR_FL_range > aIR_FR_range){
+          turn_L(slow_motor_speed, slow_motor_speed);
+          delay(400);
+        }
+        else if (aIR_FR_range < aIR_FR_zone && aIR_FL_range < aIR_FL_zone){
+          turn_around(motor_speed, motor_speed);
+        }
       }
       else
       {
-        assess_back(dIR_BR_range, dIR_BL_range);
-        if (dIR_BR_range && dIR_BL_range)
-        {
-          back_off(motor_speed, motor_speed);
-          delay(600);
-          assess_LR(aIR_FR_range, aIR_FL_range);
-          if (aIR_FR_range > aIR_FL_range){
-            turn_R(slow_motor_speed, slow_motor_speed);
-            delay(400);
-          }
-          else if (aIR_FL_range > aIR_FR_range){
-            turn_L(slow_motor_speed, slow_motor_speed);
-            delay(400);
-          }
-          else if (aIR_FR_range < aIR_FR_zone && aIR_FL_range < aIR_FL_zone){
-            turn_around(motor_speed, motor_speed);
-          }
-        }
-        else
-        {
-          assess_LR(aIR_FR_range, aIR_FL_range);
-          if (aIR_FR_range > aIR_FL_range)
-            turn_R(motor_speed, motor_speed);
-          else if (aIR_FL_range > aIR_FR_range)
-            turn_L(motor_speed,motor_speed);
-          else{
-            turn_around(motor_speed,motor_speed);
-          }
+        assess_LR(aIR_FR_range, aIR_FL_range);
+        if (aIR_FR_range > aIR_FL_range)
+          turn_R(motor_speed, motor_speed);
+        else if (aIR_FL_range > aIR_FR_range)
+          turn_L(motor_speed,motor_speed);
+        else{
+          turn_around(motor_speed,motor_speed);
         }
       }
+      
         
     }
 
