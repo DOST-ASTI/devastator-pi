@@ -61,6 +61,7 @@ $ rosdep install -y --from-paths src --ignore-src --rosdistro kinetic -r --os=de
 sudo ./src/catkin/bin/catkin_make_isolated --install -DCMAKE_BUILD_TYPE=Release --install-space /opt/ros/kinetic -j2
 ```
 If an error occurs, try [adding more swap space](https://wpitchoune.net/tricks/raspberry_pi3_increase_swap_size.html).
+
 5. Source the new installation
 ```
 $ source /opt/ros/kinetic/setup.bash
