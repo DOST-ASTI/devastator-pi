@@ -40,80 +40,80 @@ void stop()
   digitalWrite(M2,LOW);
 }
 
-void advance(int motor_speedA,int motor_speedB)
+void advance(int default_speedA,int default_speedB)
 {
-  analogWrite (E1,motor_speedA);
+  analogWrite (E1,default_speedA);
   digitalWrite(M1,HIGH);
-  analogWrite (E2,motor_speedB);
+  analogWrite (E2,default_speedB);
   digitalWrite(M2,LOW);
 }
 
-void back_off(int motor_speedA,int motor_speedB)
+void back_off(int default_speedA,int default_speedB)
 {
-  analogWrite (E1,motor_speedA);
-  analogWrite (E2,motor_speedB);
+  analogWrite (E1,default_speedA);
+  analogWrite (E2,default_speedB);
   digitalWrite(M1,LOW);
   digitalWrite(M2,HIGH);
 }
 
-void back_and_turnL(int motor_speedA,int motor_speedB)
+void back_and_turnL(int default_speedA,int default_speedB)
 {
-  analogWrite (E1,motor_speedA);
-  analogWrite (E2,motor_speedB);
+  analogWrite (E1,default_speedA);
+  analogWrite (E2,default_speedB);
   digitalWrite(M1,LOW);
   digitalWrite(M2,HIGH);
   delay(700);
-  analogWrite (E1,motor_speedA);
+  analogWrite (E1,default_speedA);
   digitalWrite(M1,LOW);
-  analogWrite (E2,motor_speedB);
+  analogWrite (E2,default_speedB);
   digitalWrite(M2,LOW);
   delay(800);
 }
 
-void back_and_turnR(int motor_speedA,int motor_speedB)
+void back_and_turnR(int default_speedA,int default_speedB)
 {
-  analogWrite (E1,motor_speedA);
-  analogWrite (E2,motor_speedB);
+  analogWrite (E1,default_speedA);
+  analogWrite (E2,default_speedB);
   digitalWrite(M1,LOW);
   digitalWrite(M2,HIGH);
   delay(800);
-  analogWrite (E1,motor_speedA);
+  analogWrite (E1,default_speedA);
   digitalWrite(M1,HIGH);
-  analogWrite (E2,motor_speedB);
+  analogWrite (E2,default_speedB);
   digitalWrite(M2,HIGH);
   delay(800);
 }
 
-void back_manual(int motor_speedA,int motor_speedB)
+void back_manual(int default_speedA,int default_speedB)
 {
-  analogWrite (E1,motor_speedA);
-  analogWrite (E2,motor_speedB);
+  analogWrite (E1,default_speedA);
+  analogWrite (E2,default_speedB);
   digitalWrite(M1,LOW);
   digitalWrite(M2,HIGH);
 }
 
-void turn_L(int motor_speedA,int motor_speedB)
+void turn_L(int default_speedA,int default_speedB)
 {
-  analogWrite (E1,motor_speedA);
+  analogWrite (E1,default_speedA);
   digitalWrite(M1,LOW);
-  analogWrite (E2,motor_speedB);
+  analogWrite (E2,default_speedB);
   digitalWrite(M2,LOW);
 }
 
-void turn_R(int motor_speedA,int motor_speedB)
+void turn_R(int default_speedA,int default_speedB)
 {
-  analogWrite (E1,motor_speedA);
+  analogWrite (E1,default_speedA);
   digitalWrite(M1,HIGH);
-  analogWrite (E2,motor_speedB);
+  analogWrite (E2,default_speedB);
   digitalWrite(M2,HIGH);
 }
 
-void turn_around(int motor_speedA, int motor_speedB)
+void turn_around(int default_speedA, int default_speedB)
 {
   
-  analogWrite (E1,motor_speedA);
+  analogWrite (E1,default_speedA);
   digitalWrite(M1,HIGH);
-  analogWrite (E2,motor_speedB);
+  analogWrite (E2,default_speedB);
   digitalWrite(M2,HIGH);  
   delay(1250);
   
@@ -154,42 +154,25 @@ float aIR_FL_Range()
 
 int dIR_BR_Range()
 {
-  int value = 0;
-  unsigned long timer;
-  if ((millis() - timer) > 55)
-  {
-    value = digitalRead(dIR_BR);
-    timer = millis();
-    return value;
-  }
+
+  int value = digitalRead(dIR_BR);
+  return value;
 }
 
 int dIR_BL_Range()
 {
-  int value = 0;
-  unsigned long timer;
-  if ((millis() - timer) > 55)
-  {
-    value = digitalRead(dIR_BL);
-    timer = millis();
-    return value; 
-  }
+
+  int value = digitalRead(dIR_BL);
+  return value;
 }
 
 int dIR_F_Range()
 {
   int value = digitalRead(dIR_F);
-  // int value = 0;
-  // unsigned long timer;
-  // if ((millis() - timer) > 55)
-  // {
-  //   value = digitalRead(dIR_F);
-  //   timer = millis();
-   return value;
-  // }
+  return value;
 }
 
-float Sonic_F_Range()
+float Sonic_D_Range()
 {
   long duration;
   float distance = 0;
@@ -206,7 +189,7 @@ float Sonic_F_Range()
   
 }
 
-float Sonic_D_Range()
+float Sonic_F_Range()
 {
   long duration;
   float distance = 0;
@@ -290,8 +273,8 @@ void setup()
 void loop()
 {
   // Motor Speed Assignments 
-  int motor_speed = 100;
-  int slow_motor_speed = 80;
+  int default_speed = 100;
+  int slow_speed = 80;
 
   // Get Sensor Data
   float aIR_FR_range;
@@ -315,47 +298,55 @@ void loop()
 //  Serial.println(aIR_FR_range);
 //  Serial.print("aIR_L:");
 //  Serial.println(aIR_FL_range);
-
-  Serial.print("sonic_F:");
-  Serial.println(sonic_F_range);
-  Serial.print("sonic_D:");
-  Serial.println(sonic_D_range);
+  Serial.print("DIR_F: ");
+  Serial.println(dIR_F_range);
+  if (dIR_F_range) Serial.println("Nothing detected");
+  //Serial.print("sonic_F:");
+  //Serial.println(sonic_F_range);
+  //Serial.print("sonic_D:");
+  //Serial.println(sonic_D_range);
 
   //Autonavigation
   if (automode){
     assess_front(sonic_F_range, sonic_D_range, dIR_F_range);
     if (sonic_F_range > sonic_FF_zone && aIR_FR_range > aIR_FR_zone && aIR_FL_range > aIR_FL_zone){
-      advance(motor_speed,motor_speed);
+      advance(default_speed,default_speed);
       assess_LR(aIR_FR_range, aIR_FL_range);
     }
     else if (sonic_F_range <= sonic_FF_zone && aIR_FR_range > aIR_FR_zone && aIR_FL_range > aIR_FL_zone){
       assess_back(dIR_BR_range, dIR_BL_range);
-      if (dIR_BR_range && dIR_BL_range)
-      {
-        back_off(slow_motor_speed,slow_motor_speed);
-        delay(400);
-        assess_LR(aIR_FR_range, aIR_FL_range);
-        if (aIR_FR_range > aIR_FL_range){
-          turn_R(slow_motor_speed, slow_motor_speed);
+      if (dIR_BR_range && dIR_BL_range){
+        back_off(slow_speed,slow_speed);
+        delay(500);
+        turn_R(default_speed, default_speed);
+        delay(500);
+        float right_distance = aIR_FR_Range();
+        turn_L(default_speed, default_speed);
+        float left_distance = aIR_FL_Range();
+        delay(1000);
+        turn_R(default_speed, default_speed);
+        delay(500);
+        if (right_distance > left_distance){
+          turn_R(default_speed, default_speed);
           delay(500);
         }
-        else if (aIR_FL_range > aIR_FR_range){
-          turn_L(slow_motor_speed, slow_motor_speed);
+        else if (left_distance > right_distance){
+          turn_L(default_speed, default_speed);
           delay(500);
         }
         else if (aIR_FR_range < aIR_FR_zone && aIR_FL_range < aIR_FL_zone){
-          turn_around(motor_speed, motor_speed);
+          turn_around(default_speed, default_speed);
         }
       }
       else
       {
         assess_LR(aIR_FR_range, aIR_FL_range);
         if (aIR_FR_range > aIR_FL_range)
-          turn_R(motor_speed, motor_speed);
+          turn_R(default_speed, default_speed);
         else if (aIR_FL_range > aIR_FR_range)
-          turn_L(motor_speed,motor_speed);
+          turn_L(default_speed,default_speed);
         else{
-          turn_around(motor_speed,motor_speed);
+          turn_around(default_speed,default_speed);
         }
       }
       
@@ -363,58 +354,63 @@ void loop()
     }
 
     else if (sonic_F_range > sonic_FF_zone && aIR_FR_range > aIR_FR_zone && aIR_FL_range <= aIR_FL_zone)
-      turn_R(motor_speed,motor_speed);
+      turn_R(default_speed,default_speed);
 
     else if (sonic_F_range > sonic_FF_zone && aIR_FR_range <= aIR_FR_zone && aIR_FL_range > aIR_FL_zone)
-      turn_L(motor_speed,motor_speed);
+      turn_L(default_speed,default_speed);
       
     else if (sonic_F_range <= sonic_FF_zone && aIR_FR_range > aIR_FR_zone && aIR_FL_range <= aIR_FL_zone){
-      back_off(slow_motor_speed,slow_motor_speed);
+      back_off(slow_speed,slow_speed);
       delay(400);
-      turn_R(motor_speed,motor_speed);
+      turn_R(default_speed,default_speed);
     }
 
     else if (sonic_F_range <= sonic_FF_zone && aIR_FR_range <= aIR_FR_zone && aIR_FL_range > aIR_FL_zone){
-      back_off(slow_motor_speed,slow_motor_speed);
+      back_off(slow_speed,slow_speed);
       delay(400);
-      turn_L(motor_speed,motor_speed);
+      turn_L(default_speed,default_speed);
     }
 
-    else if (sonic_F_range < sonic_FF_zone && aIR_FR_range <= aIR_FR_zone && aIR_FL_range <= aIR_FL_zone)
+    else if (sonic_F_range <= sonic_FF_zone && aIR_FR_range <= aIR_FR_zone && aIR_FL_range <= aIR_FL_zone)
     {
       assess_back(dIR_BR_range, dIR_BL_range);
       if (dIR_BR_range && dIR_BL_range){
-        back_off(slow_motor_speed,slow_motor_speed);
-        delay(400);
-        assess_LR(aIR_FR_range, aIR_FL_range);
-        if (aIR_FR_range > aIR_FL_range){
-          turn_R(slow_motor_speed,slow_motor_speed);
+        back_off(slow_speed,slow_speed);
+        delay(500);
+        //assess_LR(aIR_FR_range, aIR_FL_range);
+        turn_R(default_speed, default_speed);
+        delay(500);
+        float right_distance = aIR_FR_Range();
+        turn_L(default_speed, default_speed);
+        float left_distance = aIR_FL_Range();
+        delay(1000);
+        turn_R(default_speed, default_speed);
+        delay(500);
+        if (right_distance > left_distance){
+          turn_R(default_speed, default_speed);
           delay(500);
         }
-        else if (aIR_FL_range > aIR_FR_range){
-          turn_L(slow_motor_speed, slow_motor_speed);
+        else if (left_distance > right_distance){
+          turn_L(default_speed, default_speed);
           delay(500);
         }
         else if (aIR_FR_range < aIR_FR_zone && aIR_FL_range < aIR_FL_zone){
-          turn_around(motor_speed,motor_speed);
+          turn_around(default_speed, default_speed);
         }
       }
       
       else if (!dIR_BR_range && !dIR_BL_range)
       {
         assess_front(sonic_F_range, sonic_D_range, dIR_F_range );
-        if ((sonic_D_range > sonic_FD_zone && sonic_F_range > sonic_FF_zone) ||
-        (sonic_D_range > sonic_FD_zone && sonic_F_range > sonic_FF_zone) ||
-        (sonic_D_range > sonic_FD_zone && sonic_F_range <= sonic_FF_zone) ||
-        (sonic_D_range <= sonic_FD_zone && sonic_F_range > sonic_FF_zone))
+        if (sonic_F_range > sonic_FF_zone||sonic_F_range <= sonic_FF_zone)
         {
           assess_LR(aIR_FR_range,aIR_FL_range);
           if (aIR_FR_range > aIR_FL_range)
-            turn_R(motor_speed,motor_speed);
+            turn_R(default_speed,default_speed);
           else if (aIR_FL_range > aIR_FR_range)
-            turn_L(motor_speed,motor_speed);
+            turn_L(default_speed,default_speed);
           else if (aIR_FR_range < aIR_FR_zone && aIR_FL_range < aIR_FL_zone){
-            turn_around(motor_speed,motor_speed);
+            turn_around(default_speed,default_speed);
           }
         }
         else
@@ -425,18 +421,18 @@ void loop()
       {
         assess_LR(aIR_FR_range,aIR_FL_range);
         if (aIR_FR_range > aIR_FL_range)
-            turn_R(motor_speed,motor_speed);
+            turn_R(default_speed,default_speed);
           else if (aIR_FL_range > aIR_FR_range)
-            turn_L(motor_speed,motor_speed);
+            turn_L(default_speed,default_speed);
           else{
-            turn_around(motor_speed,motor_speed);
+            turn_around(default_speed,default_speed);
           }
       }
     }
     else{
-      back_off(slow_motor_speed,slow_motor_speed);
-      delay(400);
-      turn_around(motor_speed, motor_speed);
+      back_off(default_speed,default_speed);
+      delay(500);
+      turn_around(default_speed, default_speed);
     }
   }
   
@@ -444,18 +440,19 @@ void loop()
   else 
   {
     if (flag_data == 1){
-      advance(motor_speed,motor_speed);
+      advance(default_speed,default_speed);
     }
     else if (flag_data == 2){
-      turn_R(motor_speed,motor_speed);
+      turn_R(default_speed,default_speed);
     }
     else if (flag_data == 3){
-      turn_L(motor_speed,motor_speed);
+      turn_L(default_speed,default_speed);
     }
     else if (flag_data == 5){
-      back_manual(slow_motor_speed,slow_motor_speed);
+      back_manual(slow_speed,slow_speed);
     }
     else stop();
   }
   nh.spinOnce();
+  delay(10);
 }
