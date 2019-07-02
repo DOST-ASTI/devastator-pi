@@ -21,6 +21,7 @@ $ git clone git@github.com:DOST-ASTI/devastator-pi.git
 2. Source the workspace `setup.bash`
 ```
 $ cd ~/<path_to_workspace>
+$ catkin_make
 $ source devel/setup.bash
 ```
 Note: Instead of entering the command for every shell launched, you can optionally append it to the `~/.bashrc`.
